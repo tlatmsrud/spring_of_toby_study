@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'com.mysql:mysql-connector-j:8.0.32'
+    implementation 'cglib:cglib:3.3.0'
+    implementation 'org.springframework:spring-asm:3.1.4.RELEASE'
+    implementation 'org.springframework:spring-beans:3.1.4.RELEASE'
+    implementation 'org.springframework:spring-context:3.1.4.RELEASE'
+    implementation 'org.springframework:spring-core:3.1.4.RELEASE'
+    implementation 'org.springframework:spring-expression:3.1.4.RELEASE'
+}
+
+test {
+    useJUnitPlatform()
+}
