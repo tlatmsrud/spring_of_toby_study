@@ -1,4 +1,4 @@
-package org.example.user.dao.straregy;
+package org.example.user.dao.strategy;
 
 import org.example.user.domain.User;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -18,25 +18,13 @@ public class UserDao {
     }
 
     public void add(User user) throws SQLException {
+        StatementStrategy strategy = new AddStatement(user);
+        jdbcContextWithStatementStrategy(strategy);
+    }
 
-        Connection c = dataSource.getConnection();
-
-        // 실행시킬 쿼리 생성
-        PreparedStatement ps = c.prepareStatement(
-                "insert into users(id, name, password) values(?,?,?)");
-
-        ps.setString(1, user.getId());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
-
-        // execute : 수행 결과를 Boolean 타입으로 반환
-        // executeQuery : select 구문을 처리할 때 사용하며, 수행 결과를 ResultSet 타입으로 반환
-        // executeUpdate : INSERT, UPDATE, DELETE 구문을 처리할 때 사용하며, 반영된 레코드 수를 int 타입으로 반환.
-        ps.executeUpdate();
-
-        // Close
-        ps.close();
-        c.close();
+    public void deleteAll() throws SQLException{
+        StatementStrategy strategy = new DeleteAllStatement();
+        jdbcContextWithStatementStrategy(strategy);
     }
 
     public User get(String id) throws SQLException{
@@ -97,10 +85,7 @@ public class UserDao {
         }
     }
 
-    public void deleteAll() throws SQLException{
-        StatementStrategy strategy = new DeleteAllStatement();
-        jdbcContextWithStatementStrategy(strategy);
-    }
+
 
     public int getCount() throws SQLException{
         Connection c = dataSource.getConnection();
@@ -129,6 +114,9 @@ public class UserDao {
 
             ps.executeUpdate();
 
+            // execute : 수행 결과를 Boolean 타입으로 반환
+            // executeQuery : select 구문을 처리할 때 사용하며, 수행 결과를 ResultSet 타입으로 반환
+            // executeUpdate : INSERT, UPDATE, DELETE 구문을 처리할 때 사용하며, 반영된 레코드 수를 int 타입으로 반환.
         }catch(SQLException e){
             e.printStackTrace();
             throw e;

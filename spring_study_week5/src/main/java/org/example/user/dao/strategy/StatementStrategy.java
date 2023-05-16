@@ -1,4 +1,4 @@
-package org.example.user.dao.straregy;
+package org.example.user.dao.strategy;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
