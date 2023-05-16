@@ -1,6 +1,6 @@
 package org.example.user;
 
-import org.example.user.dao.UserDao;
+import org.example.user.dao.strategy.UserDao;
 import org.example.user.domain.User;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
