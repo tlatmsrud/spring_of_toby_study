@@ -56,4 +56,41 @@ public abstract class UserDaoTemplateMethod {
 
     }
 
+    public void add() throws SQLException{
+
+        Connection c = null;
+        PreparedStatement ps = null;
+
+        try{
+            c = dataSource.getConnection();
+
+            ps = makeStatement(c);
+
+            ps.executeUpdate();
+
+        }catch(SQLException e){
+            e.printStackTrace();
+            throw e;
+        }finally {
+            if(ps != null){
+                try{
+                    ps.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+
+            if(c != null){
+                try{
+                    c.close();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+
+            }
+
+        }
+
+    }
+
 }
