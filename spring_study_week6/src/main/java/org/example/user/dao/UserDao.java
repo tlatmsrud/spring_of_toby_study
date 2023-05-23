@@ -23,6 +23,7 @@ public class UserDao {
                 new StatementStrategy(){
                     @Override
                     public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
+
                         PreparedStatement ps = c.prepareStatement(
                                 "insert into users(id, name, password) values(?,?,?)");
 
@@ -36,12 +37,7 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException{
-        jdbcContext.workWithStatementStrategy(new StatementStrategy() {
-            @Override
-            public PreparedStatement makePreparedStatement(Connection c) throws SQLException {
-                return c.prepareStatement("delete from users");
-            }
-        });
+        jdbcContext.executeSql("delete from users");
     }
 
 
@@ -120,5 +116,6 @@ public class UserDao {
 
         return count;
     }
+
 
 }
