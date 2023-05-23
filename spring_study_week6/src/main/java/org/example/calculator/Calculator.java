@@ -14,16 +14,27 @@ import java.io.IOException;
 public class Calculator {
     public int calcSum(String path) throws IOException {
 
-        BufferedReader br = new BufferedReader(new FileReader(path));
-        Integer sum = 0;
+        BufferedReader br = null;
 
-        String line = null;
+        try{
+            br = new BufferedReader(new FileReader(path));
+            Integer sum = 0;
 
-        while((line = br.readLine()) != null){
-            sum += Integer.valueOf(line);
+            String line = null;
+
+            while((line = br.readLine()) != null){
+                sum += Integer.valueOf(line);
+            }
+
+
+            return sum;
+        }catch(IOException e){
+            e.printStackTrace();
+            throw e;
+        }finally{
+            if(br != null){
+                try{ br.close();}catch(Exception e){e.printStackTrace();}
+            }
         }
-
-        br.close();
-        return sum;
     }
 }

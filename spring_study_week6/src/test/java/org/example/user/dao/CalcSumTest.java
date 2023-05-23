@@ -19,8 +19,8 @@ public class CalcSumTest {
     public void sumOfNumbers() throws IOException {
         Calculator calculator = new Calculator();
 
-        int sum = calculator.calcSum(getClass().getResource("numbers.txt").getPath());
+        int sum = calculator.calcSum(getClass().getResource("/numbers.txt").getPath());
 
-        assertThat(sum).isEqualTo(10);
+        assertThat(sum).isEqualTo(15);
     }
 }
