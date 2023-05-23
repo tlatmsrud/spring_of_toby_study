@@ -14,26 +14,49 @@ import java.io.IOException;
 public class Calculator {
     public int calcSum(String path) throws IOException {
 
+        return fileReaderTemplate(path, new BufferedReaderCallback() {
+            @Override
+            public Integer doSomeThingWithReader(BufferedReader br) throws IOException {
+                Integer sum = 0;
+                String line;
+
+                while((line = br.readLine())!= null){
+                    sum += Integer.valueOf(line);
+                }
+                return sum;
+            }
+        });
+    }
+
+    public int calcMultiply(String path) throws IOException{
+
+        return fileReaderTemplate(path, new BufferedReaderCallback() {
+            @Override
+            public Integer doSomeThingWithReader(BufferedReader br) throws IOException {
+                Integer multiply = 1;
+                String line;
+
+                while((line = br.readLine())!= null){
+                    multiply *= Integer.valueOf(line);
+                }
+                return multiply;
+            }
+        });
+    }
+
+    public Integer fileReaderTemplate(String filePath, BufferedReaderCallback callback) throws IOException {
         BufferedReader br = null;
 
         try{
-            br = new BufferedReader(new FileReader(path));
-            Integer sum = 0;
-
-            String line = null;
-
-            while((line = br.readLine()) != null){
-                sum += Integer.valueOf(line);
-            }
-
-
-            return sum;
-        }catch(IOException e){
+            br = new BufferedReader(new FileReader(filePath));
+            int ret = callback.doSomeThingWithReader(br);
+            return ret;
+        } catch (IOException e) {
             e.printStackTrace();
             throw e;
-        }finally{
+        } finally {
             if(br != null){
-                try{ br.close();}catch(Exception e){e.printStackTrace();}
+                try{br.close();}catch(Exception e){e.printStackTrace();}
             }
         }
     }
