@@ -6,6 +6,7 @@ package org.example.calculator;
  * date         : 2023-05-23
  * description  :
  */
-public interface LineCallback {
-    Integer doSomethingWithLing(String line, Integer value);
+public interface LineCallback<T> {
+    T doSomethingWithLing(String line, T value);
+
 }

@@ -39,5 +39,13 @@ public class CalcSumTest {
 
         assertThat(sum).isEqualTo(120);
     }
+
+    @Test
+    public void concatenateOfStrings() throws IOException {
+
+        String result = calculator.concatenateStrings(filePath);
+
+        assertThat(result).isEqualTo("12345");
+    }
 }
 
