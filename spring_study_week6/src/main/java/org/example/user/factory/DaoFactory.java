@@ -1,6 +1,5 @@
 package org.example.user.factory;
 
-import org.example.user.dao.JdbcContext;
 import org.example.user.dao.UserDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
