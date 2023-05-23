@@ -6,10 +6,22 @@ import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.sql.*;
+import java.util.List;
 
 public class UserDao {
 
     private JdbcTemplate jdbcTemplate;
+
+    private RowMapper<User> userMapper = new RowMapper<User>() {
+
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getString("id"));
+            user.setName(rs.getString("name"));
+            user.setPassword(rs.getString("password"));
+            return user;
+        }
+    };
 
     public void setDataSource(DataSource dataSource){
         this.jdbcTemplate = new JdbcTemplate(dataSource);
@@ -19,28 +31,22 @@ public class UserDao {
                 user.getId(), user.getName(),user.getPassword());
     }
 
-    public void deleteAll() throws SQLException{
+    public void deleteAll(){
         jdbcTemplate.update("delete from users");
     }
 
 
-    public User get(String id) throws SQLException{
+    public User get(String id){
         return jdbcTemplate.queryForObject("select * from users where id = ?", new Object[]{id},
-                new RowMapper<User>() {
-                    @Override
-                    public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        User user = new User();
-                        user.setId(rs.getString("id"));
-                        user.setName(rs.getString("name"));
-                        user.setPassword(rs.getString("password"));
-                        return user;
-                    }
-                });
+                userMapper);
     }
 
-
-
-    public int getCount() throws SQLException{
+    public int getCount(){
         return jdbcTemplate.queryForInt("select count(*) from users");
+    }
+
+    public List<User> getAll() {
+        return jdbcTemplate.query("select * from users order by id",
+                userMapper);
     }
 }

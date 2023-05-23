@@ -9,6 +9,7 @@ import org.springframework.context.support.GenericXmlApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -68,5 +69,23 @@ class UserDaoTest {
         assertThat(userDao.getCount()).isEqualTo(0);
 
         assertThatThrownBy(() -> userDao.get("test1")).isInstanceOf(EmptyResultDataAccessException.class);
+    }
+
+    @Test
+    public void getAll() throws SQLException {
+        userDao.deleteAll();
+
+        userDao.add(user1);
+        List<User> findUsers = userDao.getAll();
+        assertThat(findUsers).hasSize(1);
+
+        userDao.add(user2);
+        findUsers = userDao.getAll();
+        assertThat(findUsers).hasSize(2);
+
+        userDao.add(user3);
+        findUsers = userDao.getAll();
+        assertThat(findUsers).hasSize(3);
+
     }
 }
