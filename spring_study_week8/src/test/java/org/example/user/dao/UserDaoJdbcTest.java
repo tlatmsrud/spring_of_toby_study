@@ -99,16 +99,24 @@ class UserDaoJdbcTest {
         userDao.deleteAll();
 
         userDao.add(user1);
+        userDao.add(user2);
 
         user1.setName("수정자");
         user1.setPassword("updatePw");
         user1.setLevel(Level.GOLD);
         user1.setLogin(1000);
         user1.setRecommend(999);
-        userDao.update(user1);
+
+        int updateCnt = userDao.update(user1);
+
 
         User updateUser = userDao.get(user1.getId());
         checkSameUser(updateUser,user1);
+
+        User noUpdateUser = userDao.get(user2.getId());
+        checkSameUser(user2,noUpdateUser);
+
+        assertThat(updateCnt).isEqualTo(1);
     }
     public void checkSameUser(User user1, User user2){
         assertThat(user1.getName()).isEqualTo(user2.getName());
