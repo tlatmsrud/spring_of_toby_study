@@ -13,14 +13,14 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation("org.assertj:assertj-core:3.22.0")
+    testImplementation 'org.springframework:spring-test:5.3.27'
     implementation 'com.mysql:mysql-connector-j:8.0.32'
     implementation 'cglib:cglib:3.3.0'
-    implementation 'org.springframework:spring-asm:3.1.4.RELEASE'
-    implementation 'org.springframework:spring-beans:3.1.4.RELEASE'
-    implementation 'org.springframework:spring-context:3.1.4.RELEASE'
-    implementation 'org.springframework:spring-core:3.1.4.RELEASE'
-    implementation 'org.springframework:spring-expression:3.1.4.RELEASE'
-    implementation 'org.springframework:spring-jdbc:3.1.4.RELEASE'
+    implementation 'org.springframework:spring-beans:5.2.22.RELEASE'
+    implementation 'org.springframework:spring-context:5.2.22.RELEASE'
+    implementation 'org.springframework:spring-core:5.2.22.RELEASE'
+    implementation 'org.springframework:spring-expression:5.2.22.RELEASE'
+    implementation 'org.springframework:spring-jdbc:5.2.22.RELEASE'
 
 }
 
