@@ -28,13 +28,16 @@ class UserServiceTest {
 
     List<User> users; // 테스트 픽스처
 
+    public static final int MIN_LOGIN_COUNT_FOR_SILVER = 50;
+
+    public static final int MIN_RECCOMEND_FOR_GOLD = 30;
     @BeforeEach
     void setUp(){
        users = Arrays.asList(
-               new User("test1","테스터1","pw1", Level.BASIC, 49, 0),
-               new User("test2","테스터2","pw2", Level.BASIC, 50, 0),
-               new User("test3","테스터3","pw3", Level.SILVER, 60, 29),
-               new User("test4","테스터4","pw4", Level.SILVER, 60, 30),
+               new User("test1","테스터1","pw1", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER-1, 0),
+               new User("test2","테스터2","pw2", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER, 0),
+               new User("test3","테스터3","pw3", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD-1),
+               new User("test4","테스터4","pw4", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD),
                new User("test5","테스터5","pw5", Level.GOLD, 100, 100)
        );
     }
@@ -46,16 +49,47 @@ class UserServiceTest {
         users.forEach(user -> userDao.add(user));
 
         userService.upgradeLevels();
-        checkLevel(users.get(0),Level.BASIC);
-        checkLevel(users.get(1),Level.SILVER);
-        checkLevel(users.get(2),Level.SILVER);
-        checkLevel(users.get(3),Level.GOLD);
-        checkLevel(users.get(4),Level.GOLD);
+        checkLevelUpgraded(users.get(0),false);
+        checkLevelUpgraded(users.get(1),true);
+        checkLevelUpgraded(users.get(2),false);
+        checkLevelUpgraded(users.get(3),true);
+        checkLevelUpgraded(users.get(4),false);
 
     }
 
-    private void checkLevel(User user, Level expectedLevel){
+    @Test
+    @DisplayName("레벨이 할당되지 않은 User 등록")
+    void addWithNotAssignLevel(){
+        userDao.deleteAll();
+
+        User user = users.get(0);
+        user.setLevel(null);
+
+        userService.add(user);
+
+        checkLevelUpgraded(userDao.get(user.getId()), false);
+    }
+
+    @Test
+    @DisplayName("레벨이 할당된 User 등록")
+    void addWithAssignLevel(){
+        userDao.deleteAll();
+
+        User user = users.get(4);
+        userService.add(user);
+
+        checkLevelUpgraded(userDao.get(user.getId()), false);
+    }
+
+
+
+    private void checkLevelUpgraded(User user, boolean upgraded){
         User userUpdate = userDao.get(user.getId());
-        assertThat(userUpdate.getLevel()).isEqualTo(expectedLevel);
+
+        if(upgraded){
+            assertThat(userUpdate.getLevel()).isEqualTo(user.getLevel().getNexeLevel());
+        }else{
+            assertThat(userUpdate.getLevel()).isEqualTo(user.getLevel());
+        }
     }
 }
