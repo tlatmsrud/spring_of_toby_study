@@ -16,5 +16,10 @@
 
     <bean id = "userService" class = "org.example.user.service.UserService">
         <property name="userDao" ref = "userDao"></property>
+        <property name="userLevelUpgradePolicy" ref = "userLevelUpgradePolicy"></property>
+    </bean>
+
+    <bean id = "userLevelUpgradePolicy" class = "org.example.user.attribute.DefaultUserLevelUpgradePolicy">
+        <property name="userDao" ref = "userDao"/>
     </bean>
 </beans>
