@@ -8,7 +8,8 @@ package org.example.user.enums;
  */
 public enum Level {
 
-    GOLD(3, null),
+    PLATINUM(4, null),
+    GOLD(3, PLATINUM),
 
     SILVER(2, GOLD),
 
@@ -32,6 +33,7 @@ public enum Level {
             case 1 : return BASIC;
             case 2 : return SILVER;
             case 3 : return GOLD;
+            case 4 : return PLATINUM;
             default: throw new AssertionError("Unknown value : "+value);
         }
     }
