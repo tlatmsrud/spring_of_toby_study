@@ -1,5 +1,8 @@
 package org.example.user.service;
 
+import org.example.user.attribute.DefaultUserLevelUpgradePolicy;
+import org.example.user.attribute.EventUserLevelUpgradePolicy;
+import org.example.user.attribute.UserLevelUpgradePolicy;
 import org.example.user.dao.IUserDao;
 import org.example.user.domain.User;
 import org.example.user.enums.Level;
@@ -26,25 +29,30 @@ class UserServiceTest {
     @Autowired
     IUserDao userDao;
 
+    @Autowired
+    DefaultUserLevelUpgradePolicy defaultUserLevelUpgradePolicy;
+
+    @Autowired
+    EventUserLevelUpgradePolicy eventUserLevelUpgradePolicy;
+
     List<User> users; // 테스트 픽스처
 
-    public static final int MIN_LOGIN_COUNT_FOR_SILVER = 50;
-
-    public static final int MIN_RECCOMEND_FOR_GOLD = 30;
     @BeforeEach
     void setUp(){
        users = Arrays.asList(
-               new User("test1","테스터1","pw1", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER-1, 0),
-               new User("test2","테스터2","pw2", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER, 0),
-               new User("test3","테스터3","pw3", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD-1),
-               new User("test4","테스터4","pw4", Level.SILVER, 60, MIN_RECCOMEND_FOR_GOLD),
-               new User("test5","테스터5","pw5", Level.GOLD, 100, 100)
+               new User("test1","테스터1","pw1", Level.BASIC, 49, 0),
+               new User("test2","테스터2","pw2", Level.BASIC, 50, 0),
+               new User("test3","테스터3","pw3", Level.SILVER, 60, 29),
+               new User("test4","테스터4","pw4", Level.SILVER, 60, 30),
+               new User("test5","테스터5","pw5", Level.GOLD, 100, 100),
+               new User("test6","테스터6","pw6", Level.PLATINUM, 100, 100)
        );
     }
 
     @Test
-    @DisplayName("업그레이드 레벨 테스트")
-    void upgradeLevel(){
+    @DisplayName("업그레이드 레벨 테스트-DefaultUserLevelUpgradePolicy")
+    void upgradeLevelWithDefaultUserLevelUpgradePolicy(){
+        userService.setUserLevelUpgradePolicy(defaultUserLevelUpgradePolicy);
         userDao.deleteAll();
         users.forEach(user -> userDao.add(user));
 
@@ -54,6 +62,23 @@ class UserServiceTest {
         checkLevelUpgraded(users.get(2),false);
         checkLevelUpgraded(users.get(3),true);
         checkLevelUpgraded(users.get(4),false);
+        checkLevelUpgraded(users.get(5),false);
+    }
+
+    @Test
+    @DisplayName("업그레이드 레벨 테스트-EventUserLevelUpgradePolicy")
+    void upgradeLevelWithEventUserLevelUpgradePolicy(){
+        userService.setUserLevelUpgradePolicy(eventUserLevelUpgradePolicy);
+        userDao.deleteAll();
+        users.forEach(user -> userDao.add(user));
+
+        userService.upgradeLevels();
+        checkLevelUpgraded(users.get(0),true);
+        checkLevelUpgraded(users.get(1),true);
+        checkLevelUpgraded(users.get(2),true);
+        checkLevelUpgraded(users.get(3),true);
+        checkLevelUpgraded(users.get(4),true);
+        checkLevelUpgraded(users.get(5),false);
 
     }
 
