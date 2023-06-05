@@ -34,7 +34,7 @@ class UserTest {
     @Test
     @DisplayName("업그레이드 불가 유저에 대한 레벨 업그레이드")
     public void upgradeLevelWithUnAble(){
-        user.setLevel(Level.GOLD);
+        user.setLevel(Level.PLATINUM);
         assertThatThrownBy(() -> user.upgradeLevel()).isInstanceOf(IllegalStateException.class);
     }
 
