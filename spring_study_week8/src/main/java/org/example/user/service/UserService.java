@@ -1,5 +1,6 @@
 package org.example.user.service;
 
+import org.example.user.attribute.UserLevelUpgradePolicy;
 import org.example.user.dao.IUserDao;
 import org.example.user.domain.User;
 import org.example.user.enums.Level;
@@ -16,8 +17,13 @@ public class UserService {
 
     private IUserDao userDao;
 
+    private UserLevelUpgradePolicy userLevelUpgradePolicy;
     public void setUserDao(IUserDao userDao){
         this.userDao = userDao;
+    }
+
+    public void setUserLevelUpgradePolicy(UserLevelUpgradePolicy userLevelUpgradePolicy){
+        this.userLevelUpgradePolicy = userLevelUpgradePolicy;
     }
 
     public void upgradeLevels() {
@@ -25,33 +31,16 @@ public class UserService {
 
         for(User user : users) {
 
-            if (canUpgradeLevel(user)) {
-                upgradeLevel(user);
+            if (userLevelUpgradePolicy.canUpgradeLevel(user)) {
+                userLevelUpgradePolicy.upgradeLevel(user);
             }
         }
     }
-
-
 
     public void add(User user) {
         if(user.getLevel() == null){
             user.setLevel(Level.BASIC);
         }
         userDao.add(user);
-    }
-
-    private boolean canUpgradeLevel(User user){
-        Level currentLevel = user.getLevel();
-        switch(currentLevel){
-            case BASIC: return (user.getLogin() >= 50);
-            case SILVER: return (user.getRecommend() >= 30);
-            case GOLD: return false;
-            default: throw new IllegalArgumentException("Unknown Level :"+currentLevel);
-        }
-    }
-
-    private void upgradeLevel(User user) {
-        user.upgradeLevel();
-        userDao.update(user);
     }
 }
