@@ -68,6 +68,4 @@ class DefaultUserLevelUpgradePolicyTest {
         userLevelUpgradePolicy.upgradeLevel(users.get(3));
         assertThat(users.get(3).getLevel()).isEqualTo(Level.GOLD);
     }
-
-
 }
