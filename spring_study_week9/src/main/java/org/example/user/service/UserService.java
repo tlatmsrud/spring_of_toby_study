@@ -65,7 +65,6 @@ public class UserService {
             TransactionSynchronizationManager.unbindResource(this.dataSource); // 동기화 작업 종료
             TransactionSynchronizationManager.clearSynchronization(); // 동기화 작업 종료
         }
-
     }
 
     public void add(User user) {

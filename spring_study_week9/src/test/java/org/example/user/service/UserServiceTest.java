@@ -120,18 +120,17 @@ class UserServiceTest {
     @DisplayName("레벨업 처리 도중 예외 발생 테스트")
     void exceptionDuringLevelUp(){
         userService.setUserLevelUpgradePolicy(spyUserLevelUpgradePolicy);
-        spyUserDao.deleteAll();
-        users.forEach(user -> spyUserDao.add(user));
 
         given(spyUserDao.getAll()).willReturn(users);
         given(spyUserLevelUpgradePolicy.upgradeLevel(users.get(3))).willThrow(new RuntimeException());
+
+        spyUserDao.deleteAll();
+        users.forEach(user -> spyUserDao.add(user));
 
         userService.upgradeLevels();
 
         checkLevelUpgraded(users.get(1),false);
         checkLevelUpgraded(users.get(3),false);
-
-
     }
 
 
