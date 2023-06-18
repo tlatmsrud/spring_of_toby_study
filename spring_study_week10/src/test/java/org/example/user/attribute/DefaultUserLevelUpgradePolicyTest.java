@@ -1,10 +1,8 @@
 package org.example.user.attribute;
 
 import org.example.user.dao.IUserDao;
-import org.example.user.dao.UserDaoJdbc;
 import org.example.user.domain.User;
 import org.example.user.enums.Level;
-import org.example.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +14,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(locations = "/test-applicationContext.xml")
@@ -25,6 +22,7 @@ class DefaultUserLevelUpgradePolicyTest {
     @Autowired
     IUserDao userDao;
 
+    @Autowired
     DefaultUserLevelUpgradePolicy userLevelUpgradePolicy;
 
     List<User> users; // 테스트 픽스처
@@ -35,8 +33,6 @@ class DefaultUserLevelUpgradePolicyTest {
     @BeforeEach
     void setUp(){
 
-        userLevelUpgradePolicy = new DefaultUserLevelUpgradePolicy();
-        userLevelUpgradePolicy.setUserDao(userDao);
 
         users = Arrays.asList(
                 new User("test1","테스터1","pw1", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER-1, 0, "tlatmsrud@naver.com"),
