@@ -26,9 +26,9 @@ class UserDaoJdbcTest {
     void setUp(){
         ApplicationContext applicationContext = new GenericXmlApplicationContext("applicationContext.xml");
         userDao = applicationContext.getBean("userDao", UserDaoJdbc.class);
-        user1 = new User("test1","1234","테스터1", Level.BASIC, 1, 0);
-        user2 = new User("test2","12345","테스터2", Level.SILVER, 55, 10);
-        user3 = new User("test3","123456","테스터3", Level.GOLD, 100, 40);
+        user1 = new User("test1","1234","테스터1", Level.BASIC, 1, 0, "tlatmsrud@naver.com");
+        user2 = new User("test2","12345","테스터2", Level.SILVER, 55, 10, "tlatmsrud@naver.com");
+        user3 = new User("test3","123456","테스터3", Level.GOLD, 100, 40, "tlatmsrud@naver.com");
     }
     @Test
     public void addAndGet(){

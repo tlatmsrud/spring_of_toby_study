@@ -37,13 +37,13 @@ class EventUserLevelUpgradePolicyTest {
         userLevelUpgradePolicy.setUserDao(userDao);
 
         users = Arrays.asList(
-                new User("test1","테스터1","pw1", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER-1, 0),
-                new User("test2","테스터2","pw2", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER, 0),
-                new User("test3","테스터3","pw3", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD-1),
-                new User("test4","테스터4","pw4", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD),
-                new User("test5","테스터5","pw5", Level.GOLD, 100, MIN_RECOMMEND_FOR_PLATINUM-1),
-                new User("test6","테스터6","pw6", Level.GOLD, 100, MIN_RECOMMEND_FOR_PLATINUM),
-                new User("test7","테스터7","pw7", Level.PLATINUM, 100, 120)
+                new User("test1","테스터1","pw1", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER-1, 0, "tlatmsrud@naver.com"),
+                new User("test2","테스터2","pw2", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER, 0, "tlatmsrud@naver.com"),
+                new User("test3","테스터3","pw3", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD-1, "tlatmsrud@naver.com"),
+                new User("test4","테스터4","pw4", Level.SILVER, 60, MIN_RECOMMEND_FOR_GOLD, "tlatmsrud@naver.com"),
+                new User("test5","테스터5","pw5", Level.GOLD, 100, MIN_RECOMMEND_FOR_PLATINUM-1, "tlatmsrud@naver.com"),
+                new User("test6","테스터6","pw6", Level.GOLD, 100, MIN_RECOMMEND_FOR_PLATINUM, "tlatmsrud@naver.com"),
+                new User("test7","테스터7","pw7", Level.PLATINUM, 100, 120, "tlatmsrud@naver.com")
         );
 
 
