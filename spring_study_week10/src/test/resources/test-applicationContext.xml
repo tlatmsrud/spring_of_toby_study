@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id = "dataSource" class ="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+        <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+        <property name="url" value = "jdbc:mysql://localhost/spring"></property>
+        <property name="username" value = "tlatmsrud"></property>
+        <property name="password" value = "tla1203#"></property>
+    </bean>
+
+    <bean id = "userDao" class = "org.example.user.dao.UserDaoJdbc">
+        <property name = "dataSource" ref = "dataSource"></property>
+    </bean>
+
+    <bean id = "userService" class = "org.example.user.service.UserService">
+        <property name="userDao" ref = "userDao"></property>
+        <property name="transactionManager" ref = "transactionManager"></property>
+    </bean>
+
+    <bean id = "defaultUserLevelUpgradePolicy" class = "org.example.user.attribute.DefaultUserLevelUpgradePolicy">
+        <property name="userDao" ref = "userDao"/>
+    </bean>
+
+    <bean id = "eventUserLevelUpgradePolicy" class = "org.example.user.attribute.EventUserLevelUpgradePolicy">
+        <property name="userDao" ref = "userDao"/>
+    </bean>
+
+    <bean id = "transactionManager" class ="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"></property>
+    </bean>
+</beans>
