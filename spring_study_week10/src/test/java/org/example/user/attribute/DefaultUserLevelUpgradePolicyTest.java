@@ -33,7 +33,6 @@ class DefaultUserLevelUpgradePolicyTest {
     @BeforeEach
     void setUp(){
 
-
         users = Arrays.asList(
                 new User("test1","테스터1","pw1", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER-1, 0, "tlatmsrud@naver.com"),
                 new User("test2","테스터2","pw2", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER, 0, "tlatmsrud@naver.com"),

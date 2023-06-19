@@ -6,8 +6,8 @@
     <bean id = "dataSource" class ="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
         <property name="url" value = "jdbc:mysql://localhost/spring"></property>
-        <property name="username" value = "ID"></property>
-        <property name="password" value = "PW"></property>
+        <property name="username" value = "tlatmsrud"></property>
+        <property name="password" value = "tla1203#"></property>
     </bean>
 
     <bean id = "userDao" class = "org.example.user.dao.UserDaoJdbc">
@@ -32,8 +32,8 @@
     <bean id = "mailSender" class = "org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value = "smtp.naver.com"></property>
         <property name="port" value = "465"></property>
-        <property name="username" value = "ID"></property>
-        <property name="password" value = "PW"></property>
+        <property name="username" value = "tlatmsrud"></property>
+        <property name="password" value = "tmdrud1203#"></property>
         <property name="javaMailProperties">
             <props>
                 <prop key="mail.smtp.ssl.enable">"true"</prop>

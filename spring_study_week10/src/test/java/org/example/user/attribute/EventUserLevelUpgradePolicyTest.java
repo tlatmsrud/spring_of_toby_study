@@ -23,6 +23,7 @@ class EventUserLevelUpgradePolicyTest {
     @Autowired
     IUserDao userDao;
 
+    @Autowired
     EventUserLevelUpgradePolicy userLevelUpgradePolicy;
 
     List<User> users; // 테스트 픽스처
@@ -32,9 +33,6 @@ class EventUserLevelUpgradePolicyTest {
     private static final int MIN_RECOMMEND_FOR_PLATINUM = 100;
     @BeforeEach
     void setUp(){
-
-        userLevelUpgradePolicy = new EventUserLevelUpgradePolicy();
-        userLevelUpgradePolicy.setUserDao(userDao);
 
         users = Arrays.asList(
                 new User("test1","테스터1","pw1", Level.BASIC, MIN_LOGIN_COUNT_FOR_SILVER-1, 0, "tlatmsrud@naver.com"),
