@@ -131,6 +131,7 @@ class UserServiceTest {
 
         checkLevelUpgraded(users.get(1),false);
         checkLevelUpgraded(users.get(3),false);
+        verify(spyUserLevelUpgradePolicy).upgradeLevel(users.get(4));
     }
 
 
