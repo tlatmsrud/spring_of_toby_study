@@ -3,7 +3,7 @@ package org.example.user.factory;
 import org.example.user.attribute.DefaultUserLevelUpgradePolicy;
 import org.example.user.attribute.UserLevelUpgradePolicy;
 import org.example.user.dao.UserDaoJdbc;
-import org.example.user.service.UserService;
+import org.example.user.service.UserServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
@@ -32,8 +32,8 @@ public class DaoFactory {
     }
 
     @Bean
-    public UserService userService(){
-        UserService userService = new UserService();
+    public UserServiceImpl userService(){
+        UserServiceImpl userService = new UserServiceImpl();
         userService.setUserDao(userDao());
         userService.setUserLevelUpgradePolicy(userLevelUpgradePolicy());
         return userService;
