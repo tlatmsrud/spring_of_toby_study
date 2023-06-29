@@ -25,6 +25,9 @@ import static org.mockito.BDDMockito.given;
 class UserServiceTest {
 
     @Autowired
+    UserServiceImpl userServiceImpl;
+
+    @Autowired
     UserService userService;
 
     @Autowired
@@ -60,7 +63,7 @@ class UserServiceTest {
     @Test
     @DisplayName("업그레이드 레벨 테스트-DefaultUserLevelUpgradePolicy")
     void upgradeLevelWithDefaultUserLevelUpgradePolicy(){
-        userService.setUserLevelUpgradePolicy(defaultUserLevelUpgradePolicy);
+        userServiceImpl.setUserLevelUpgradePolicy(defaultUserLevelUpgradePolicy);
         userDao.deleteAll();
         users.forEach(user -> userDao.add(user));
 
@@ -76,7 +79,7 @@ class UserServiceTest {
     @Test
     @DisplayName("업그레이드 레벨 테스트-EventUserLevelUpgradePolicy")
     void upgradeLevelWithEventUserLevelUpgradePolicy(){
-        userService.setUserLevelUpgradePolicy(eventUserLevelUpgradePolicy);
+        userServiceImpl.setUserLevelUpgradePolicy(eventUserLevelUpgradePolicy);
         userDao.deleteAll();
         users.forEach(user -> userDao.add(user));
 
@@ -117,7 +120,7 @@ class UserServiceTest {
     @Test
     @DisplayName("레벨업 처리 도중 예외 발생 테스트")
     void exceptionDuringLevelUp(){
-        userService.setUserLevelUpgradePolicy(spyUserLevelUpgradePolicy);
+        userServiceImpl.setUserLevelUpgradePolicy(spyUserLevelUpgradePolicy);
 
         given(spyUserDao.getAll()).willReturn(users);
         given(spyUserLevelUpgradePolicy.upgradeLevel(users.get(3))).willThrow(new RuntimeException());
