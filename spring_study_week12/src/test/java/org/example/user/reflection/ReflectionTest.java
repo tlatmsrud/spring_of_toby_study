@@ -38,9 +38,13 @@ public class ReflectionTest {
     public void simpleProxy(){
         Hello hello = new HelloTarget(); // 타깃은 인터페이스를 통해 접근
         assertThat(hello.sayHello("Sim")).isEqualTo("Hello Sim");
+        assertThat(hello.sayHi("Sim")).isEqualTo("Hi Sim");
+        assertThat(hello.sayThankYou("Sim")).isEqualTo("Thank You Sim");
 
         Hello proxyHello = new HelloUppercase(hello);
         assertThat(proxyHello.sayHello("Sim")).isEqualTo("HELLO SIM");
+        assertThat(proxyHello.sayHi("Sim")).isEqualTo("HI SIM");
+        assertThat(proxyHello.sayThankYou("Sim")).isEqualTo("THANK YOU SIM");
     }
 
     @Test
