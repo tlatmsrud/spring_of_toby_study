@@ -94,9 +94,9 @@ public class DynamicProxyUserServiceTest {
         txHandler.setPattern("upgradeLevels");
 
         UserService proxyUserService = (UserService) Proxy.newProxyInstance(
-                getClass().getClassLoader()
-                ,new Class[] {UserService.class}
-                ,txHandler
+                getClass().getClassLoader() // 다이나믹 프록시 클래스의 로딩에 사용할 클래스 로더
+                ,new Class[] {UserService.class} // 구현할 인터페이스
+                ,txHandler // 부가 기능과 위임 코드를 담은 InvocationHandler
         );
 
         userDao.deleteAll();
