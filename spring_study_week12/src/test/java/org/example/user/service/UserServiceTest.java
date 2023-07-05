@@ -5,9 +5,17 @@ import org.example.user.attribute.UserLevelUpgradePolicy;
 import org.example.user.dao.IUserDao;
 import org.example.user.domain.User;
 import org.example.user.enums.Level;
+import org.example.user.proxy.TransactionHandler;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.PlatformTransactionManager;
+
+import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,10 +25,19 @@ import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.*;
 
 
+@ExtendWith(SpringExtension.class)
+@ContextConfiguration(locations = "/test-applicationContext.xml")
 class UserServiceTest {
 
-    private final UserServiceImpl userServiceImpl = new UserServiceImpl();
-    private final IUserDao userDao = mock(IUserDao.class);
+    @Autowired
+    private PlatformTransactionManager transactionManager;
+
+    @Autowired
+    private IUserDao userDao;
+
+    @Autowired
+    private UserServiceImpl userServiceImpl;
+
     private final UserLevelUpgradePolicy userLevelUpgradePolicy = mock(UserLevelUpgradePolicy.class);
     private final List<User> users = Arrays.asList(
             new User("test1","테스터1","pw1", Level.BASIC, 49, 0, "tlatmsrud@naver.com"),
@@ -38,11 +55,7 @@ class UserServiceTest {
         given(userDao.getAll()).willReturn(users);
         willDoNothing().given(userDao).add(any(User.class));
 
-        given(userLevelUpgradePolicy.canUpgradeLevel(users.get(0))).willReturn(false);
-        given(userLevelUpgradePolicy.canUpgradeLevel(users.get(1))).willReturn(true);
-        given(userLevelUpgradePolicy.canUpgradeLevel(users.get(2))).willReturn(false);
-        given(userLevelUpgradePolicy.canUpgradeLevel(users.get(3))).willReturn(true);
-        given(userLevelUpgradePolicy.canUpgradeLevel(users.get(4))).willReturn(false);
+
 
         given(userLevelUpgradePolicy.upgradeLevel(any(User.class))).will(invocation -> {
            User source = invocation.getArgument(0);
@@ -60,6 +73,20 @@ class UserServiceTest {
         verify(userLevelUpgradePolicy,times(5)).canUpgradeLevel(any(User.class));
         verify(userLevelUpgradePolicy).upgradeLevel(users.get(1));
         verify(userLevelUpgradePolicy).upgradeLevel(users.get(3));
+    }
+
+    @Test
+    void upgradleAllOrNoting() throws Exception{
+
+        TransactionHandler txHandler = new TransactionHandler();
+        txHandler.setTarget(userServiceImpl);
+        txHandler.setTransactionManager(transactionManager);
+        txHandler.setPattern("upgradeLevels");
+
+        UserService txUserService = (UserService) Proxy.newProxyInstance(
+                getClass().getClassLoader()
+                ,new Class[] {UserService.class}
+                ,txHandler);
     }
 
     @Test

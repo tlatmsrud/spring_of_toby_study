@@ -10,7 +10,6 @@ public class UserServiceImpl implements UserService {
 
     private IUserDao userDao;
 
-
     private UserLevelUpgradePolicy userLevelUpgradePolicy;
     public void setUserDao(IUserDao userDao){
         this.userDao = userDao;
