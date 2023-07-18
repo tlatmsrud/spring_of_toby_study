@@ -65,20 +65,24 @@ public class DynamicProxyUserServiceTest {
         given(userDao.getAll()).willReturn(users);
 
         willThrow(new RuntimeException()).given(userLevelUpgradePolicy).upgradeLevel(users.get(3));
-
-
     }
 
     @Test
     void upgradeAllOrNothingWithNoProxy(){
+
+        // 테이블 데이터 초기화
         userDao.deleteAll();
+
+        // 테이블에 유저 정보 insert
         users.forEach(user -> userDao.add(user));
 
+        // 유저 레벨 업그레이드 메서드 실행 및 예외 발생 여부 확인 (setUp 메서드에 3번째 유저 업그레이드 처리 시 예외 발생하도록 스터빙 추가)
         assertThatThrownBy(() -> userService.upgradeLevels())
                 .isInstanceOf(RuntimeException.class);
 
+        // DB
         assertThat(userDao.get("test1").getLevel()).isEqualTo(Level.BASIC);
-        assertThat(userDao.get("test2").getLevel()).isEqualTo(Level.SILVER);
+        assertThat(userDao.get("test2").getLevel()).isEqualTo(Level.SILVER); // 트랜잭션이 적용되지 않아 BASIC 레벨로 롤백되지 않음.
         assertThat(userDao.get("test3").getLevel()).isEqualTo(Level.SILVER);
         assertThat(userDao.get("test4").getLevel()).isEqualTo(Level.SILVER);
         assertThat(userDao.get("test5").getLevel()).isEqualTo(Level.GOLD);
@@ -88,29 +92,32 @@ public class DynamicProxyUserServiceTest {
     @Test
     void upgradeAllOrNothingWithProxy(){
 
+        // 부가기능 핸들러 객체 생성
         TransactionHandler txHandler = new TransactionHandler();
         txHandler.setTarget(userService);
         txHandler.setTransactionManager(transactionManager);
         txHandler.setPattern("upgradeLevels");
 
+        // 다이나믹 프록시 생성
         UserService proxyUserService = (UserService) Proxy.newProxyInstance(
                 getClass().getClassLoader() // 다이나믹 프록시 클래스의 로딩에 사용할 클래스 로더
                 ,new Class[] {UserService.class} // 구현할 인터페이스
                 ,txHandler // 부가 기능과 위임 코드를 담은 InvocationHandler
         );
 
+        // 테이블 데이터 초기화
         userDao.deleteAll();
+
+        // 테이블에 유저 정보 insert
         users.forEach(user -> userDao.add(user));
 
-        try{
-            proxyUserService.upgradeLevels();
-        }catch(Exception e){
-            System.out.println("예외발생!");
-            assertThat(userDao.get("test1").getLevel()).isEqualTo(Level.BASIC);
-            assertThat(userDao.get("test2").getLevel()).isEqualTo(Level.BASIC);
-            assertThat(userDao.get("test3").getLevel()).isEqualTo(Level.SILVER);
-            assertThat(userDao.get("test4").getLevel()).isEqualTo(Level.SILVER);
-            assertThat(userDao.get("test5").getLevel()).isEqualTo(Level.GOLD);
-        }
+        assertThatThrownBy(() -> proxyUserService.upgradeLevels())
+                .isInstanceOf(RuntimeException.class);
+
+        assertThat(userDao.get("test1").getLevel()).isEqualTo(Level.BASIC);
+        assertThat(userDao.get("test2").getLevel()).isEqualTo(Level.BASIC); // 트랜잭션이 적용되지 않아 BASIC 레벨로 롤백됨.
+        assertThat(userDao.get("test3").getLevel()).isEqualTo(Level.SILVER);
+        assertThat(userDao.get("test4").getLevel()).isEqualTo(Level.SILVER);
+        assertThat(userDao.get("test5").getLevel()).isEqualTo(Level.GOLD);
     }
 }
