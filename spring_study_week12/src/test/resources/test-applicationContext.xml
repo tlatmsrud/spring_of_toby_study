@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.0.xsd"
+>
 
     <bean id = "dataSource" class ="org.springframework.jdbc.datasource.SimpleDriverDataSource">
         <property name="driverClass" value="com.mysql.jdbc.Driver"></property>
@@ -35,19 +40,13 @@
 
     <bean id = "mailSender" class = "org.example.user.service.DummyMailSender"/>
 
-    <bean class ="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
-
     <bean id = "transactionAdvice" class = "org.example.proxy.TransactionAdvice">
         <property name="transactionManager" ref = "transactionManager"></property>
     </bean>
-    <bean id = "transactionPointcut" class = "org.example.proxy.NameMatchClassMethodPointcut">
-        <property name="mappedClassName" value = "*ServiceImpl"/>
-        <property name="mappedName" value = "upgrade*"/>
-    </bean>
 
-    <bean id = "transactionAdvisor" class = "org.springframework.aop.support.DefaultPointcutAdvisor">
-        <property name="advice" ref = "transactionAdvice"></property>
-        <property name="pointcut" ref ="transactionPointcut"></property>
-    </bean>
+    <aop:config>
+        <aop:advisor advice-ref="transactionAdvice"
+                     pointcut="execution(* org.example.user.service.*ServiceImpl.upgrade*(..))"></aop:advisor>
+    </aop:config>
 
 </beans>
