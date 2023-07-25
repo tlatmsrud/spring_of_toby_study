@@ -55,20 +55,23 @@ public class DynamicProxyUserServiceTest {
     @BeforeEach
     void setUp(){
 
+        // 모든 유저 조회 시 미리 정의한 유저 텍스처 조회
         given(userDao.getAll()).willReturn(users);
+
+        // 4번째 유저에 대한 업그레이드 메서드 실행 시 예외 발생
         willThrow(new RuntimeException()).given(userLevelUpgradePolicy).upgradeLevel(users.get(3));
     }
 
 
     @Test
-    void upgradeAllOrNothingWithNoProxy(){
+    void upgradeAllOrNothing(){
         // 테이블 데이터 초기화
         userDao.deleteAll();
 
         // 테이블에 유저 정보 insert
         users.forEach(user -> userDao.add(user));
 
-        // 유저 레벨 업그레이드 메서드 실행 및 예외 발생 여부 확인 (setUp 메서드에 3번째 유저 업그레이드 처리 시 예외 발생하도록 스터빙 추가)
+        // 유저 레벨 업그레이드 메서드 실행 및 예외 발생 여부 확인 (setUp 메서드에 4번째 유저 업그레이드 처리 시 예외 발생하도록 스터빙 추가)
         assertThatThrownBy(() -> userService.upgradeLevels())
                 .isInstanceOf(RuntimeException.class);
 
