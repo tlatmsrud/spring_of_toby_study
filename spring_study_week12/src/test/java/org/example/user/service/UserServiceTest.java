@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -32,7 +33,7 @@ class UserServiceTest {
     @Autowired
     private PlatformTransactionManager transactionManager;
 
-    @Autowired
+    @SpyBean
     private IUserDao userDao;
 
     @Autowired
@@ -54,8 +55,6 @@ class UserServiceTest {
 
         given(userDao.getAll()).willReturn(users);
         willDoNothing().given(userDao).add(any(User.class));
-
-
 
         given(userLevelUpgradePolicy.upgradeLevel(any(User.class))).will(invocation -> {
            User source = invocation.getArgument(0);

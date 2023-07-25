@@ -14,12 +14,7 @@
         <property name = "dataSource" ref = "dataSource"></property>
     </bean>
 
-    <bean id = "userService" class ="org.example.user.service.UserServiceTx">
-        <property name="transactionManager" ref = "transactionManager"></property>
-        <property name="userService" ref = "userServiceImpl"></property>
-    </bean>
-
-    <bean id = "userServiceImpl" class = "org.example.user.service.UserServiceImpl">
+    <bean id = "userService" class = "org.example.user.service.UserServiceImpl">
         <property name="userDao" ref = "userDao"></property>
         <property name="userLevelUpgradePolicy" ref = "defaultUserLevelUpgradePolicy"></property>
     </bean>
@@ -39,4 +34,20 @@
     </bean>
 
     <bean id = "mailSender" class = "org.example.user.service.DummyMailSender"/>
+
+    <bean class ="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+
+    <bean id = "transactionAdvice" class = "org.example.proxy.TransactionAdvice">
+        <property name="transactionManager" ref = "transactionManager"></property>
+    </bean>
+    <bean id = "transactionPointcut" class = "org.example.proxy.NameMatchClassMethodPointcut">
+        <property name="mappedClassName" value = "*ServiceImpl"/>
+        <property name="mappedName" value = "upgrade*"/>
+    </bean>
+
+    <bean id = "transactionAdvisor" class = "org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="advice" ref = "transactionAdvice"></property>
+        <property name="pointcut" ref ="transactionPointcut"></property>
+    </bean>
+
 </beans>

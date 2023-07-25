@@ -14,12 +14,7 @@
         <property name = "dataSource" ref = "dataSource"></property>
     </bean>
 
-    <bean id = "userService" class ="org.example.user.service.UserServiceTx">
-        <property name="transactionManager" ref = "transactionManager"></property>
-        <property name="userService" ref = "userServiceImpl"></property>
-    </bean>
-
-    <bean id = "userServiceImpl" class = "org.example.user.service.UserServiceImpl">
+    <bean id = "userServiceService" class = "org.example.user.service.UserServiceImpl">
         <property name="userDao" ref = "userDao"></property>
         <property name="userLevelUpgradePolicy" ref = "userLevelUpgradePolicy"></property>
     </bean>
@@ -33,6 +28,18 @@
         <property name="dataSource" ref="dataSource"></property>
     </bean>
 
+    <bean id = "transactionAdvice" class = "org.example.proxy.TransactionAdvice">
+        <property name="transactionManager" ref = "transactionManager"></property>
+    </bean>
+
+    <bean id = "transactionPointcut" class = "org.example.proxy.NameMatchClassMethodPointcut">
+        <property name="mappedClassName" value = "*ServiceImpl"/>
+        <property name="mappedName" value = "upgrade*"/>
+    </bean>
+
+    <bean id = "transactionAdvisor" class = "org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="advice" ref = "transactionAdvice"></property>
+    </bean>
     <bean id = "mailSender" class = "org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value = "smtp.naver.com"></property>
         <property name="port" value = "465"></property>
@@ -46,4 +53,8 @@
             </props>
         </property>
     </bean>
+
+    <bean class ="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+
+
 </beans>
