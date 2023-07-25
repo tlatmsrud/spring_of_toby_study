@@ -24,6 +24,7 @@ dependencies {
     implementation 'org.springframework:spring-jdbc:5.2.22.RELEASE'
     implementation 'org.springframework:spring-aop:5.2.22.RELEASE'
     implementation 'aopalliance:aopalliance:1.0'
+    implementation 'org.aspectj:aspectjtools:1.9.19'
 
     testImplementation 'org.mockito:mockito-core:4.3.1'
     testImplementation 'org.springframework.boot:spring-boot-starter-test:1.5.9.RELEASE'
